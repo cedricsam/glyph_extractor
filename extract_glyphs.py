@@ -212,7 +212,7 @@ with TTFont(fontPath, fontNumber=0) as ttfont:
                 print(f"{text} -> empty")
                 continue
         except:
-            print(f"{text} -> empty")
+            print(f"{hex(key)} {text} -> empty (imagefont can't getbbox())")
             continue
 
         try:

@@ -205,24 +205,23 @@ with TTFont(fontPath, fontNumber=0) as ttfont:
         text = "" + chr(key)
         filename = f"{hex(key)}.png"
 
-        try:
-            (left, top, right, bottom) = imagefont.getbbox(text)
+        (left, top, right, bottom) = imagefont.getbbox(text)
+        width = -left + right
+        height = -top + bottom
 
-            if width <= 0 or height <= 0:
-                print(f"{text} -> empty")
-                continue
-        except:
-            print(f"{hex(key)} {text} -> empty (imagefont can't getbbox())")
+        print(f"L={left} T={top} R={right} B={bottom} {width}x{height}")
+        if width <= 0 or height <= 0:
+            print(f"{text} -> empty")
             continue
 
         try:
             img = Image.new('RGBA', size=(width, height))
             d = ImageDraw.Draw(img)
 
-            d.text((0, 0), text, font=imagefont, embedded_color=colored, fill=fillColor)
+            d.text((-left, -top), text, font=imagefont, embedded_color=colored, fill=fillColor)
             while bleed(img): pass
             clear(img)
-            d.text((0, 0), text, font=imagefont, embedded_color=colored, fill=fillColor)
+            d.text((-left, -top), text, font=imagefont, embedded_color=colored, fill=fillColor)
 
             img.save(os.path.join(outputDir, filename))
             print(f"{text} -> {filename}")
